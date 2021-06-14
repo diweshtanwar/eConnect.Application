@@ -172,6 +172,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SAdminController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -475,6 +476,42 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\SAdmin\CreateRole.cshtml" />
+    <Content Include="Views\SAdmin\ManageUser.cshtml" />
+    <Content Include="Views\SAdmin\RoleDetails.cshtml" />
+    <Content Include="Views\SAdmin\TechSupportReqDetails.cshtml" />
+    <Content Include="Views\SAdmin\_BindRoles.cshtml" />
+    <Content Include="Views\SAdmin\_EditRequest.cshtml" />
+    <Content Include="Views\SAdmin\_TecRequestHistory.cshtml" />
+    <Content Include="Views\Admin\AccountConfiguration.cshtml" />
+    <Content Include="Views\Admin\ApplicationSetting.cshtml" />
+    <Content Include="Views\Admin\ApproveCSP.cshtml" />
+    <Content Include="Views\Admin\ShowFolderImages.cshtml" />
+    <Content Include="Views\Admin\Uploader.cshtml" />
+    <Content Include="Views\Admin\UploaderDetails.cshtml" />
+    <Content Include="Views\Admin\UploadFolderImages.cshtml" />
+    <Content Include="Views\Admin\ViewCSPProfile.cshtml" />
+    <Content Include="Views\Admin\_AccountConfigurationDetails.cshtml" />
+    <Content Include="Views\Admin\_AddAccountConfiguration.cshtml" />
+    <Content Include="Views\Admin\_AddApplicationSetting.cshtml" />
+    <Content Include="Views\Admin\_ApplicationSetting.cshtml" />
+    <Content Include="Views\Admin\_EditAccountConfiguration.cshtml" />
+    <Content Include="Views\Admin\_UploaderList.cshtml" />
+    <Content Include="Views\Shared\_BindSupportRequest.cshtml" />
+    <Content Include="Views\Shared\_Deposite.cshtml" />
+    <Content Include="Views\Shared\_LayoutAditya.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Views\Shared\_LayoutSuperAdmin.cshtml" />
+    <Content Include="Views\Shared\_Test.cshtml" />
+    <Content Include="Views\Shared\_Withdraw.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\RegisterOld.cshtml" />
+    <Content Include="Views\Home\TechSupportRequest.cshtml" />
+    <Content Include="Views\Home\TransactionRequest.cshtml" />
+    <Content Include="Views\Shared\_LayoutMain.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
