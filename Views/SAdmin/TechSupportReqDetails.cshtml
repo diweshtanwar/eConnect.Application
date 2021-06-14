@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "TechSupportReqDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Tech Support Requests</h2>
+@*<meta name="viewport" content="width=device-width" />*@
+<title>Tech Support Requests</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
+        $("#datepickerFrom").datepicker({
+            prevText: "click for previous months",
+            nextText: "click for next months",
+            showOtherMonths: true,
+            selectOtherMonths: false,
+            timePicker: true,
+            timeZone: true,
+            locale: {
+                format: 'MM/DD/YYYY h:mm A'
+            },
+            showOtherMonths: true,
+            selectOtherMonths: true
+            //minDate: '01/01/2012',
+            //maxDate: '12/31/2017'
+        });
+        $("#datepickerTo").datepicker({
+            prevText: "click for previous months",
+            nextText: "click for next months",
+            timePicker: true,
+            timeZone: true,
+            locale: {
+                format: 'MM/DD/YYYY h:mm PM'
+            },
+            showOtherMonths: true,
+            selectOtherMonths: true
+            //minDate: '01/01/2012',
+            //maxDate: '12/31/2017'
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    function LoadData() {
+        var ReqID = $('#ReqID').val();
+        var CSPName = $('#CSPName').val();
+        var CSPID = $('#CSPID').val();
+        var e = document.getElementById("Status");
+        var Status = e.options[e.selectedIndex].value;
+        var Reqtype = $('#SearchBy').val();
+        var From = $('#datepickerFrom').val();
+        var To = $('#datepickerTo').val();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("TechSupportReqDetails", "SAdmin")',
+            data: { ReqID: ReqID, CSPName: CSPName, CSPID: CSPID, Status: Status, Reqtype: Reqtype, From: From, To: To },
+                dataType: 'html',
+                success: function (data) {
+                    $('#RequestDetailsList').html(data);
+                }
+            });
+    }
+</script>
+<style type="text/css">
+    body {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+
+    table {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+        width: 80%;
+    }
+
+        table th {
+            background-color: #c7c6c3;
+            color: #333;
+            font-weight: bold;
+            width: 10%;
+        }
+
+        table th, table td {
+            padding: 5px;
+            width: 10%;
+            border: 1px solid #ccc;
+        }
+
+    .error {
+        color: red;
+    }
+</style>
+@using (Html.BeginForm("TechSupportReqDetails", "SAdmin"))
+{
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="4">
+                Filter
+            </th>
+        </tr>
+        <tr>
+            <td>
+                Request ID:
+            </td>
+            <td>  <input type="text" id="ReqID" name="" /></td>
+            <td>
+                CSP Name:
+            </td>
+            <td>
+                <input type="text" id="CSPName" name="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                CSP ID:
+            </td>
+            <td>
+                <input type="text" id="CSPID" name="" />
+            </td>
+            <td>
+                Status:
+            </td>
+            <td>
+                @Html.DropDownList("Status", new SelectList(ViewBag.Statuslist, "StatusId", "Name"), "Select Status", new { id = "Status" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Search By:
+            </td>
+            <td>
+                @Html.DropDownList("SearchBy", new List<SelectListItem>
+      {new SelectListItem{ Text="--Select--", Value = "" },
+         new SelectListItem{ Text="Requested Date", Value = "1" },
+         new SelectListItem{ Text="Completion Date", Value = "2" },
+      })
+            </td>
+            <td>
+                From <input type="text" id="datepickerFrom" />
+            </td>
+            <td>
+                To <input type="text" id="datepickerTo" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align:center;">
+                <input type="button" value="Search" name="btnSubmit" onclick="LoadData()" />
+                <input type="button" value="Cancel" id="btnCancel" onclick="location.href='@Url.Action("TechSupportReqDetails")'" />
+
+            </td>
+        </tr>
+    </table>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td colspan="4">
+                <div id="RequestDetailsList">
+                </div>
+            </td>
+        </tr>
+    </table>
+}
+<script src="~/Content/Plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Content/Plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/Content/Plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/Content/Plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="~/Content/Plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/Content/Plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="~/Content/Plugins/jszip/jszip.min.js"></script>
+<script src="~/Content/Plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="~/Content/Plugins/pdfmake/pdfmake.min.js"></script>
+<script src="~/Content/Plugins/pdfmake/vfs_fonts.js"></script>
+<script src="~/Content/Plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="~/Content/Plugins/datatables-buttons/js/buttons.print.min.js"></script>
+
+@if (TempData["Message"] != null)
+{
+    <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+    </script>
+}

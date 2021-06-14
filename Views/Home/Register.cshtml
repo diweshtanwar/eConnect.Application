@@ -1,0 +1,1137 @@
+﻿@model ApplicationModel.UsersModel
+@{
+    ViewBag.Title = "Register";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutSuperAdmin.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    @*<link rel="stylesheet" href="~/Content/AdminLTE-3.1.0/dist/css/style.css">*@
+    @*<script src="@Url.Content("~/Content/AdminLTE-3.1.0/dist/js/custom.js")"></script>*@
+
+    <title>Register</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+    <style type="text/css">
+
+        .modal-dialog {
+            max-width: 650px;
+            margin: 1.75rem auto;
+        }
+        .p-15 {
+            padding: 15px !important;
+        }
+
+        .modal-dialog {
+            margin: 28px auto
+        }
+
+        div.ui-datepicker {
+            font-size: 14px;
+        }
+
+        .ms-options-wrap > button:focus, .ms-options-wrap > button {
+            padding: 7px 8px;
+            height: 40px;
+            border: 1px solid;
+            font-size: 14px;
+        }
+
+        .ms-options-wrap > .ms-options > ul label {
+            font-weight: 400;
+            font-family: inherit;
+        }
+    </style>
+    <script type="text/javascript">
+        function ClearVal() {
+            $('#user_img').attr('src', "");
+            $('#PassportPic').val('');
+        }
+
+        function Checksize(filesize) {
+            if (filesize > 2097152) // 2 MiB for bytes.
+            {
+                alert("File size must under 2MB!");
+                return;
+            }
+            else {
+                //    alert("File size less than 2MB!");
+            }
+        }
+
+        function popup() {
+            $("#CSP").modal('show');
+        }
+        function inputValidation()
+        {
+            if ($("#CSPName").val() == "") {
+                alert("Please Enter CSP Name !!");
+                $("#CSPName").focus();
+                return false;
+            }
+            if ($("#CSPCode").val() == "") {
+                alert("Please Enter CSP Code");
+                $("#CSPCode").focus();
+                return false;
+            }
+            if ($("#FatherName").val() == "") {
+                alert("Please Enter FatherName");
+                $("#FatherName").focus();
+                return false;
+            }
+            if ($("#MotherName").val() == "") {
+                alert("Please Enter MotherName");
+                $("#MotherName").focus();
+                return false;
+            }
+            if ($("#CountryID").val() == "") {
+                alert("Please Select Country");
+                $("#CountryID").focus();
+                return false;
+            }
+            if ($("#StateID").val() == "---Select---") {
+                alert("Please Select State");
+                $("#StateID").focus();
+                return false;
+            }
+            if ($("#CityID").val() == "---Select---") {
+                alert("Please Select City");
+                $("#CityID").focus();
+                return false;
+            }
+            if ($("#BranchCode").val() == "") {
+                alert("Please Enter BranchCode");
+                $("#BranchCode").focus();
+                return false;
+            }
+            if ($("#BankAccountName").val() == "") {
+                alert("Please Enter Bank Account Detail");
+                $("#BankAccountName").focus();
+                return false;
+            }
+            if ($("#PANCardNo").val() == "") {
+                alert("Please Enter PANCardNo");
+                $("#PANCardNo").focus();
+                return false;
+            }
+            if ($("#VoterIDNo").val() == "") {
+                alert("Please Enter Voter Card ID");
+                $("#VoterIDNo").focus();
+                return false;
+            }
+            if ($("#AdharCardNo").val() == "") {
+                alert("Please Enter Adhar Card No");
+                $("#AdharCardNo").focus();
+                return false;
+            }
+            if ($("#Education").val() == "") {
+                alert("Please Enter Education");
+                $("#Education").focus();
+                return false;
+            }
+            if ($("#Mobile").val() == "") {
+                alert("Please Enter Mobile Number");
+                $("#Mobile").focus();
+                return false;
+            }
+            if ($("#EMailID").val() == "") {
+                alert("Please Enter EMailID");
+                $("#EMailID").focus();
+                return false;
+            }
+            if ($("#EMailID").val() == "") {
+                alert("Please Enter EMailID");
+                $("#EMailID").focus();
+                return false;
+            }
+            if ($("#PassportPic").get(0).files.length === 0) {
+                alert("Please Upload Passport Size Photo");
+                $("#PassportPic").focus();
+                return false;
+            }
+            if ($("#PANCardPic").get(0).files.length === 0) {
+                alert("Please Upload PANCard");
+                $("#PANCardPic").focus();
+                return false;
+            }
+            if ($("#VoterIDPic").get(0).files.length === 0) {
+                alert("Please Upload VoterID");
+                $("#VoterIDPic").focus();
+                return false;
+            }
+            if ($("#AAdharCardPic").get(0).files.length === 0) {
+                alert("Please Upload AAdharCard");
+                $("#AAdharCardPic").focus();
+                return false;
+            }
+            if ($("#FileEducationProof").get(0).files.length === 0) {
+                alert("Please Upload Latest Education Proof");
+                $("#FileEducationProof").focus();
+                return false;
+            }
+            if ($("#IIBFCertificatePic").get(0).files.length === 0) {
+                alert("Please Upload IIBFCertificate");
+                $("#IIBFCertificatePic").focus();
+                return false;
+            }
+        }
+        function CheckFile(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['pdf', 'jpg', 'png', 'jpeg'];
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    //$('#user_img').attr('src', "");
+                    alert("Only these file types are accepted : " + validExtensions.join(', '));
+                }
+                else {
+                    Checksize(input.files[0].size);
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                            //   $('#user_img').attr('src', e.target.result);
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            }
+        }
+        function show(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['jpg', 'png', 'jpeg'];
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    $('#user_img').attr('src', "");
+                    alert("Only these file types are accepted : " + validExtensions.join(', '));
+                }
+                else {
+                    Checksize(input.files[0].size);
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                            $('#user_img').attr('src', e.target.result);
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $("#CountryID").change(function () {
+                var id = $(this).val();
+                $("#StateID").empty();
+                $("#CityID").empty();
+                $.get("BindStates", { country_id: id }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#StateID").html(v);
+
+                });
+            });
+            $("#StateID").change(function () {
+                var sid = $(this).val();
+                $("#CityID").empty();
+                $.get("BindCity", { state_id: sid }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#CityID").html(v);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Customer Service Point</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Users</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Search</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>User ID:</label>
+                                            <input type="text" id="inputName" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Designation:</label>
+                                            <select id="inputStatus" class="form-control custom-select">
+                                                <option selected disabled>Select one</option>
+                                                <option>Admin</option>
+                                                <option>Support</option>
+                                                <option>Operation</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Status:</label>
+                                            <select id="inputStatus" class="form-control custom-select">
+                                                <option selected disabled>Select one</option>
+                                                <option>Active</option>
+                                                <option>InActive</option>
+                                                <option>Blocked</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Role:</label>
+                                            <select id="inputStatus" class="form-control custom-select">
+                                                <option selected disabled>Select one</option>
+                                                <option>Admin</option>
+                                                <option>User</option>
+                                                <option>CSP</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>User Name:</label>
+                                    <div class="input-group">
+                                        <input type="search" class="form-control " placeholder="Type your keywords here" value="">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="table-actions">
+
+                                    <a href="javascript:void(0)" id="add-request-btn" class="btn-primary-green-on-white" onclick="popup()">Add User</a>
+                                </div>
+                            </div>
+                            <div class="add-task" id="add-request">
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Rendering engine</th>
+                                                <th>Browser</th>
+                                                <th>Platform(s)</th>
+                                                <th>Engine version</th>
+                                                <th>CSS grade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Trident</td>
+                                                <td>
+                                                    Internet
+                                                    Explorer 4.0
+                                                </td>
+                                                <td>Win 95+</td>
+                                                <td> 4</td>
+                                                <td>X</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trident</td>
+                                                <td>
+                                                    Internet
+                                                    Explorer 5.0
+                                                </td>
+                                                <td>Win 95+</td>
+                                                <td>5</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trident</td>
+                                                <td>
+                                                    Internet
+                                                    Explorer 5.5
+                                                </td>
+                                                <td>Win 95+</td>
+                                                <td>5.5</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trident</td>
+                                                <td>
+                                                    Internet
+                                                    Explorer 6
+                                                </td>
+                                                <td>Win 98+</td>
+                                                <td>6</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trident</td>
+                                                <td>Internet Explorer 7</td>
+                                                <td>Win XP SP2+</td>
+                                                <td>7</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trident</td>
+                                                <td>AOL browser (AOL desktop)</td>
+                                                <td>Win XP</td>
+                                                <td>6</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Firefox 1.0</td>
+                                                <td>Win 98+ / OSX.2+</td>
+                                                <td>1.7</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Firefox 1.5</td>
+                                                <td>Win 98+ / OSX.2+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Firefox 2.0</td>
+                                                <td>Win 98+ / OSX.2+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Firefox 3.0</td>
+                                                <td>Win 2k+ / OSX.3+</td>
+                                                <td>1.9</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Camino 1.0</td>
+                                                <td>OSX.2+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Camino 1.5</td>
+                                                <td>OSX.3+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Netscape 7.2</td>
+                                                <td>Win 95+ / Mac OS 8.6-9.2</td>
+                                                <td>1.7</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Netscape Browser 8</td>
+                                                <td>Win 98SE+</td>
+                                                <td>1.7</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Netscape Navigator 9</td>
+                                                <td>Win 98+ / OSX.2+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.0</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.1</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1.1</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.2</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1.2</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.3</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1.3</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.4</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1.4</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.5</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1.5</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.6</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>1.6</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.7</td>
+                                                <td>Win 98+ / OSX.1+</td>
+                                                <td>1.7</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Mozilla 1.8</td>
+                                                <td>Win 98+ / OSX.1+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Seamonkey 1.1</td>
+                                                <td>Win 98+ / OSX.2+</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gecko</td>
+                                                <td>Epiphany 2.20</td>
+                                                <td>Gnome</td>
+                                                <td>1.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>Safari 1.2</td>
+                                                <td>OSX.3</td>
+                                                <td>125.5</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>Safari 1.3</td>
+                                                <td>OSX.3</td>
+                                                <td>312.8</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>Safari 2.0</td>
+                                                <td>OSX.4+</td>
+                                                <td>419.3</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>Safari 3.0</td>
+                                                <td>OSX.4+</td>
+                                                <td>522.1</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>OmniWeb 5.5</td>
+                                                <td>OSX.4+</td>
+                                                <td>420</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>iPod Touch / iPhone</td>
+                                                <td>iPod</td>
+                                                <td>420.1</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Webkit</td>
+                                                <td>S60</td>
+                                                <td>S60</td>
+                                                <td>413</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 7.0</td>
+                                                <td>Win 95+ / OSX.1+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 7.5</td>
+                                                <td>Win 95+ / OSX.2+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 8.0</td>
+                                                <td>Win 95+ / OSX.2+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 8.5</td>
+                                                <td>Win 95+ / OSX.2+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 9.0</td>
+                                                <td>Win 95+ / OSX.3+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 9.2</td>
+                                                <td>Win 88+ / OSX.3+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera 9.5</td>
+                                                <td>Win 88+ / OSX.3+</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Opera for Wii</td>
+                                                <td>Wii</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Nokia N800</td>
+                                                <td>N800</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Presto</td>
+                                                <td>Nintendo DS browser</td>
+                                                <td>Nintendo DS</td>
+                                                <td>8.5</td>
+                                                <td>C/A<sup>1</sup></td>
+                                            </tr>
+                                            <tr>
+                                                <td>KHTML</td>
+                                                <td>Konqureror 3.1</td>
+                                                <td>KDE 3.1</td>
+                                                <td>3.1</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>KHTML</td>
+                                                <td>Konqureror 3.3</td>
+                                                <td>KDE 3.3</td>
+                                                <td>3.3</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>KHTML</td>
+                                                <td>Konqureror 3.5</td>
+                                                <td>KDE 3.5</td>
+                                                <td>3.5</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tasman</td>
+                                                <td>Internet Explorer 4.5</td>
+                                                <td>Mac OS 8-9</td>
+                                                <td>-</td>
+                                                <td>X</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tasman</td>
+                                                <td>Internet Explorer 5.1</td>
+                                                <td>Mac OS 7.6-9</td>
+                                                <td>1</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tasman</td>
+                                                <td>Internet Explorer 5.2</td>
+                                                <td>Mac OS 8-X</td>
+                                                <td>1</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>NetFront 3.1</td>
+                                                <td>Embedded devices</td>
+                                                <td>-</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>NetFront 3.4</td>
+                                                <td>Embedded devices</td>
+                                                <td>-</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>Dillo 0.8</td>
+                                                <td>Embedded devices</td>
+                                                <td>-</td>
+                                                <td>X</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>Links</td>
+                                                <td>Text only</td>
+                                                <td>-</td>
+                                                <td>X</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>Lynx</td>
+                                                <td>Text only</td>
+                                                <td>-</td>
+                                                <td>X</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>IE Mobile</td>
+                                                <td>Windows Mobile 6</td>
+                                                <td>-</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Misc</td>
+                                                <td>PSP browser</td>
+                                                <td>PSP</td>
+                                                <td>-</td>
+                                                <td>C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Other browsers</td>
+                                                <td>All others</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>U</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Rendering engine</th>
+                                                <th>Browser</th>
+                                                <th>Platform(s)</th>
+                                                <th>Engine version</th>
+                                                <th>CSS grade</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <div id="add-request">
+                                test
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <div class="modal fade" id="CSP" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="CSPLabel" aria-hidden="true">
+        <div class="modal-dialog full-screen modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header p-15">
+                    <h2 class="modal-title fis-h6" id="CSPLabel">User Registration</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-15">
+                    <div class="table-responsive">
+                        @using (Html.BeginForm("Register", "Home", FormMethod.Post, new
+                        {
+                            enctype = "multipart/form-data"
+                        }))
+                        {
+                            
+                        <div style="width:800px; margin:0 auto;">
+                            <div>
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th colspan="3">
+                                            Personal Details
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            CSP Name
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("CSPName")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            CSP Code
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("CSPCode")
+                                        </td>
+                                        <td>
+                                            @*@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Father Name
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("FatherName")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Mother Name
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("MotherName")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Country
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(o => o.CountryID, new SelectList(ViewBag.AllCountries, "CountryId", "Name"), "Select Country", new { id = "CountryID" })
+                                        </td>
+                                        <td>
+                                            @*@Html.ValidationMessageFor(m => m.CountryID, "", new { @class = "error" })*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            State
+                                        </td>
+                                        <td>
+                                            <select id="StateID" name="StateID"></select>
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.StateID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            City
+                                        </td>
+                                        <td>
+                                            <select id="CityID" name="CityID"></select>
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            BranchCode
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("BranchCode")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Bank Account Detail
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("BankAccountName")
+                                        </td>
+                                        <td>
+                                            @*@Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            PAN Card No
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("PANCardNo")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Voter Card ID
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("VoterIDNo")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Adhar Card No
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("AdharCardNo")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Education
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("Education")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Mobile
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("Mobile")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            EMailID
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("EMailID")
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.EMailID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">
+                                            Upload
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Passport Size Photo
+                                        </td>
+                                        <td>
+                                            <nobr>
+                                                <input type="file" id="PassportPic" name="PassportPic" onchange="show(this)" /><label id="lblClear" name="lblClear" style="color: blue;cursor: pointer;" onclick="ClearVal()">Clear</label>
+                                            </nobr>
+                                        </td>
+                                        <td>
+                                            <div> <img id="user_img" height="100" width="90" style="border:solid" /></div>
+                                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            PAN Card No
+                                        </td>
+                                        <td>
+                                            <input type="file" id="PANCardPic" name="PANCardPic" onchange="CheckFile(this)" />
+
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Voter Card ID
+                                        </td>
+                                        <td>
+                                            <input type="file" id="VoterIDPic" name="VoterIDPic" onchange="CheckFile(this)" />
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Adhar Card No
+                                        </td>
+                                        <td>
+                                            <input type="file" id="AAdharCardPic" name="AAdharCardPic" onchange="CheckFile(this)" />
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Latest Education Proof
+                                        </td>
+                                        <td>
+                                            <input type="file" id="FileEducationProof" name="FileEducationProof" onchange="CheckFile(this)" />
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            IIBF
+                                        </td>
+                                        <td>
+                                            <input type="file" id="IIBFCertificatePic" name="IIBFCertificatePic" onchange="CheckFile(this)" />
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "error" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <input type="submit" class="btn-primary-green-on-white" value="Submit" name="btnSubmit" onclick="return inputValidation()" />
+                                            @*<input type="button"  value="Cancel" name="btnSubmit" />
+                                            @Html.ActionLink("Approve", "ApproveCSP", "Admin")*@
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer p-15">
+                    @*<input type="submit" class="btn-primary-green-on-white" value="Submit" name="btnSubmit" onclick="return inputValidation()" />*@
+                    <button type="button" class="btn-primary-green-on-white" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+        </script>
+    }
+</body>
+</html>
+

@@ -1,0 +1,113 @@
+﻿@using ApplicationLogic;
+@{
+    ViewBag.Title = "Approve CSP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    <title>Register</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("ApproveCSP", "Admin", FormMethod.Post))
+    {
+        <div>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th colspan="10">
+                        CSP Requests
+                    </th>
+                </tr>
+                <tr style="background-color:gainsboro;">
+                    <td>
+                        CSP Name
+                    </td>
+                    <td>
+                        Mobile
+                    </td>
+                    <td>
+                        EMail
+                    </td>
+                    <td>
+                        Country
+                    </td>
+                    <td>
+                        State
+                    </td>
+                    <td>
+                        City
+                    </td>
+                    <td>
+                        Status
+                    </td>
+                    <td>View Profile</td>
+                    <td>Approve</td>
+                    <td>Reject</td>
+                </tr>
+                @foreach (var item in @ViewBag.Users)
+                {
+                    <tr>
+                        <td>@item.UserID @item.CSPName</td>
+                        <td> @item.Mobile</td>
+                        <td> @item.EMailID</td>
+                        <td>@item.Country.CountryName</td>
+                        <td>@item.State.StateName</td>
+                        <td>@item.City.CityName</td>
+                        <td>@item.Status</td>
+                        <td>
+                            @{
+                                string encrypt = CommonLogic.EncryptText(@item.UserID.ToString());
+                                @Html.ActionLink("ViewProfile", "ViewCSPProfile", "Admin", new { id = encrypt }, null)
+                            }
+                        </td>
+                        <td><input type="submit" value="Approve" /></td>
+                        <td><input type="submit" value="Reject" /></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @if (@ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@ViewBag.Message")
+            });
+        </script>
+    }
+</body>
+</html>
+

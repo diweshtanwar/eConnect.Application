@@ -1,0 +1,391 @@
+﻿@using System.Configuration;
+@using ApplicationLogic;
+@*@model ApplicationModel.UsersModel*@
+@{
+    ViewBag.Title = "ViewCSPProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    <title>Register</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+        function ClearVal() {
+            $('#user_img').attr('src', "");
+            $('#PassportPhoto').val('');
+        }
+        function show(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['xlsx', 'pdf', 'jpg', 'png', 'jpeg']; //array of valid extensions
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    $('#user_img').attr('src', "");
+                    alert("Only these file types are accepted : " + validExtensions.join(', '));
+                }
+                else {
+                    if (input.files[0].size > 2097152) // 2 MiB for bytes.
+                    {
+                        alert("File size must under 2MB!");
+                        return;
+                    }
+                    else {
+                        if (input.files && input.files[0]) {
+                            var filerdr = new FileReader();
+                            filerdr.onload = function (e) {
+                                $('#user_img').attr('src', e.target.result);
+                            }
+                            filerdr.readAsDataURL(input.files[0]);
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("ViewCSPProfile", "Home", FormMethod.Post))
+    {
+        string RootFilePath = System.Web.HttpContext.Current.Server.MapPath(Convert.ToString(ConfigurationManager.AppSettings["RootFilePath"]));
+        if (@Model != null)
+        {
+            <div>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th colspan="3">
+                            Personal Details
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            CSP Name
+                        </td>
+                        <td>
+                            @Model[0].CSPName
+                        </td>
+                        <td rowspan="4">
+                            @{
+                                string Picpath = "~/UploadedFiles//Proofs//" + @Model[0].UserID + "//PassportPic//" + @Model[0].PassportPic;
+                                <img id="img_logo" alt="Logo" src="@Url.Content(Picpath)" height="140" width="140" style="border:solid;text-align:center;" />
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Father Name
+                        </td>
+                        <td>
+                            @Model[0].FatherName
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mother Name
+                        </td>
+                        <td>
+                            @Model[0].MotherName
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Country
+                        </td>
+                        <td>
+                            @Model[0].Country.CountryName
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            State
+                        </td>
+                        <td>
+                            @Model[0].State.StateName
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            City
+                        </td>
+                        <td>
+                            @Model[0].City.CityName
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            BranchCode
+                        </td>
+                        <td>
+                            @Model[0].BranchCode
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            PAN Card No
+                        </td>
+                        <td>
+                            @Model[0].PANCardNo
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Voter Card ID
+                        </td>
+                        <td>
+                            @Model[0].VoterIDNo
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Adhar Card No
+                        </td>
+                        <td>
+                            @Model[0].AdharCardNo
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Education
+                        </td>
+                        <td>
+                            @Model[0].Education
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mobile
+                        </td>
+                        <td>
+                            @Model[0].Mobile
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            EMailID
+                        </td>
+                        <td>
+                            @Model[0].EMailID
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">
+                            Upload
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            PAN Card No
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(@Model[0].PANCardName))
+                            {
+                                @Html.ActionLink("view file", "OpenFile", new { id = CommonLogic.EncryptText(@Model[0].UserID.ToString()), filename = @Model[0].PANCardName, filetype = "PANCardPic" }, null)
+                            }
+                            else
+                            { <span style="color:red;">No file uploaded.</span>
+                            }
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Voter Card ID
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(@Model[0].VoterIDName))
+                            {
+                                @Html.ActionLink("view file", "OpenFile", new { id = CommonLogic.EncryptText(@Model[0].UserID.ToString()), filename =@Model[0].VoterIDName.ToString(), filetype = "VoterIDPic" }, null)
+                            }
+                            else
+                            { <span style="color:red;">No file uploaded.</span>
+                            }
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Aadhar Card No
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(@Model[0].AAdharCardName))
+                            {
+                                @Html.ActionLink("view file", "OpenFile", new { id = CommonLogic.EncryptText(@Model[0].UserID.ToString()), filename = @Model[0].AAdharCardName.ToString(), filetype = "AAdharCardPic" }, null)
+                            }
+                            else
+                            { <span style="color:red;">No file uploaded.</span>
+                            }
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Latest Education Proof
+                        </td>
+                        <td>
+                            @*@if (!string.IsNullOrEmpty(@Model[0].FileEducationProof))
+                                {
+                                    @Html.ActionLink("view file", "OpenFile", new { id = @Model[0].UserID, filename = @Model[0].FileEducationProof, filetype = "FileEducationProof" }, null)
+                                }
+                                @*else
+                                { <span style="color:red;">No file uploaded.</span>
+                                }*@
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            IIBF
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(@Model[0].IIBFCertificate))
+                            {
+                                @Html.ActionLink("view file", "OpenFile", new { id = CommonLogic.EncryptText(@Model[0].UserID.ToString()), filename =@Model[0].IIBFCertificate.ToString(), filetype = "IIBFCertificatePic" }, null)
+                            }
+                            else
+                            { <span style="color:red;">No file uploaded.</span>
+                            }
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">
+                            Admin
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            CSP Code
+                        </td>
+                        <td>
+                            @Html.TextBox("CSPCode")
+                        </td>
+                        <td>
+                            @* @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Expiry Date
+                        </td>
+                        <td>
+                            @Html.TextBox("Password")
+                        </td>
+                        <td>
+                            @* @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Certificate Status
+                        </td>
+                        <td>
+                            @Html.TextBox("Password")
+                        </td>
+                        <td>
+                            @* @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Status
+                        </td>
+                        <td>
+                            @Html.TextBox("Password")
+                        </td>
+                        <td>
+                            @* @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Username
+                        </td>
+                        <td>
+                            @Html.TextBox("Username")
+
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Password
+                        </td>
+                        <td>
+                            @Html.TextBox("Password")
+                        </td>
+                        <td>
+                            @* @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="button" value="Approve" id="btnApprove" />
+                            <input type="submit" value="Reject" />
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        }
+    }
+</body>
+</html>
+
+
+

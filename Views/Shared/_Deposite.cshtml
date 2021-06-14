@@ -1,0 +1,42 @@
+﻿@model ApplicationModel.Deposit
+<tr>
+    <td>
+        Request Type
+    </td>
+    <td>
+        @Html.DropDownListFor(x=>x.Receipt, new List<SelectListItem>
+
+        {new SelectListItem{ Text="--Select--", Value = "" },
+         new SelectListItem{ Text="A", Value = "1" },
+         new SelectListItem{ Text="B", Value = "2" },
+         new SelectListItem{ Text="C", Value = "3" },
+         new SelectListItem{ Text="D", Value = "4" }
+      },new { @id = "drpType" })
+    </td>
+
+</tr>
+<tr>
+    <td>
+        Amount
+    </td>
+    <td>
+        @Html.TextBoxFor(x=>x.Amount,new { @id="txtAmount"})
+    </td>
+</tr>
+<tr>
+    <td>
+        Receipt
+    </td>
+    <td>
+        <input type="file" id="amountReceipt" name="AmountReceipt" onchange="CheckFile(this)" />
+    </td>
+</tr>
+<tr>
+
+    <td colspan="2">
+        <center>
+            <input type="submit" value="Submit" onclick="return InsertDepositDetails()" />
+            <input type="button" value="Cancel" />
+        </center>
+    </td>
+</tr>

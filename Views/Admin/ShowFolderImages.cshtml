@@ -1,0 +1,28 @@
+﻿@model ApplicationModel.FolderDetailsModel
+@using System.Configuration;
+@{
+    ViewBag.Title = "Show FolderImages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ShowFolderImages", "Admin", FormMethod.Post))
+{
+
+    string FolderImages = System.Web.HttpContext.Current.Server.MapPath(Convert.ToString(ConfigurationManager.AppSettings["FolderImages"]));
+    string fid = "2";
+    string path = Path.Combine(FolderImages, fid);
+    DirectoryInfo dir = new DirectoryInfo(path);
+    FileInfo[] file = dir.GetFiles();
+    
+    foreach (FileInfo file2 in file)
+    {
+        string Picpath = "~/SiteImages//" + fid + "//" + file2.Name;
+       <img id="img_logo" alt="Logo" src="@Url.Content(Picpath)" style="border:solid;text-align:center;padding-top:15px;" />
+        <br />
+        <br />
+        <br />
+    }
+
+
+
+}

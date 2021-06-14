@@ -1,0 +1,119 @@
+﻿@model ApplicationModel.TechSupportRequestModel
+@{
+    ViewBag.Title = "TechSupportRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    <title>Register</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("TechSupportRequest", "Home", FormMethod.Post))
+    {
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2">
+                    Tech Support Request
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    Select ProblemType
+                </td>
+                <td>
+                    @if (ViewBag.ProblemList == null)
+                    {
+                        <span style="color:red;">No Problem Type Inserted </span>
+                    }
+                    else
+                    {
+                        @Html.DropDownList("TechProblemType", new SelectList(ViewBag.ProblemList, "ProblemTypeId", "Name"), "Select Problem", new { id = "TechProblemType" })
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Description
+                </td>
+                <td>
+                    @Html.TextArea("Description", new { id= "Description" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Screenshot
+                </td>
+                <td>
+                    <input type="file" id="Screenshot" name="Screenshot" onchange="CheckFile(this)" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Mobile
+                </td>
+                <td>
+                    @Html.TextBox("MobileNumber")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ask Any Details
+                </td>
+                <td>
+                    @Html.TextArea("DeskDetail", new { id= "DeskDetail" })
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Submit" />
+                    <input type="button" value="Cancel" />
+                    @Html.Hidden("UserID", (object)Session["UserID"])
+                </td>
+            </tr>
+        </table>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+        </script>
+    }
+</body>
+</html>
+
+

@@ -1,0 +1,149 @@
+﻿@model ApplicationModel.UploaderModel
+@{
+    ViewBag.Title = "Uploader Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script src="~/Content/Plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/Plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/Plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/Plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/Plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/Plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/Plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/Content/Plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/Plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/Plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/Plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <title>Uploader Details</title>
+
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+         function LoadData() {
+        //     var ReqID = $('#ReportType').val();
+        //var CSPName = $('#CSPName').val();
+        //var CSPID = $('#CSPID').val();
+        //var e = document.getElementById("Status");
+        //var Status = e.options[e.selectedIndex].value;
+        //var Reqtype = $('#SearchBy').val();
+        //var From = $('#datepickerFrom').val();
+        //var To = $('#datepickerTo').val();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploaderDetails", "Admin")',
+            data: { RequestType: 1, year: 1, month: 2},
+                dataType: 'html',
+                success: function (data) {
+                    $('#UploaderList').html(data);
+                }
+            });
+    }
+
+
+    </script>
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("UploaderDetails", "Admin", FormMethod.Post))
+    {
+        <div>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th colspan="3">
+                        Request Detail
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        Select Request Type
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(o => o.ReportType, new SelectList(ViewBag.RequestTypes, "ReportTypeId", "Name"), "Select Type", new { id = "ReportType" })
+                    </td>
+                    <td>
+                        @*@Html.ValidationMessageFor(m => m.CountryID, "", new { @class = "error" })*@
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Select Year-Month
+                    </td>
+                    <td>
+                        @Html.DropDownList("Year", new SelectList(ViewBag.Years, "Text", "Text"), "YY", new { id = "Year" })
+                        @Html.DropDownList("Month", new SelectList(ViewBag.Months, "Value", "Text"), "MM", new { id = "Month" })
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="button" value="Search" name="btnSubmit" onclick="LoadData()" />
+                        <input type="button" value="Cancel" />
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td colspan="4">
+                        <div id="UploaderList">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+    
+
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+        </script>
+    }
+</body>
+</html>
+

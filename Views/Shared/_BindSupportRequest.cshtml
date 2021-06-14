@@ -1,0 +1,261 @@
+﻿@model IEnumerable<ApplicationModel.TechSupportRequestModel>
+@{
+
+    Layout = null;
+}
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            buttons: [
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+            ],
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
+<div class="card" width="100%">
+    <div class="card-header">
+        <h3 class="card-title">
+            Transaction Requests Detail
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped" style="text-align :center;width:100%;">
+            <thead>
+                <tr>
+                    <th>SNo</th>
+                    <th>Request ID</th>
+                    <th>Problem Type</th>
+                    <th>CSP</th>
+                    <th>Mobile No</th>
+                    <th>Requested Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                    <th>History</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int count = 1; }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @count
+                        </td>
+                        <td>
+                            @item.TechSupportReqID
+                        </td>
+                        <td>
+                            @item.TechProbName
+                        </td>
+                        <td>
+                            @item.RaisedByName
+                        </td>
+                        <td>
+                            @item.MobileNo
+                        </td>
+                        <td>
+                            @item.RequestedDate.ToString("dd-MMMM-yy")
+                        </td>
+
+                        @{ string Statuscolor = string.Empty;
+                            if (item.Status == 1)
+                            {
+                                Statuscolor = "background-color:#b3ffb3;";
+                            }
+                            else if (item.Status == 2)
+                            {
+                                Statuscolor = "background-color:Yellow;";
+
+                            }
+                            else if (item.Status == 3)
+                            {
+                                Statuscolor = "background-color:#43f04f;";
+                            }
+                            else
+                            {
+                                Statuscolor = "background-color:#ffddcc;";
+                            }
+
+                        }
+                        <td style="@Statuscolor">
+                            @item.StatusName
+                        </td>
+                        <td>
+                            <a class="details" href="javascript:;" onclick="ViewClick(@item.TechSupportReqID,'View')">View</a>
+                        </td>
+                        <td>
+                            <a class="details" href="javascript:;" onclick="ViewClick(@item.TechSupportReqID,'Go')">Go</a>
+
+                            <a class="details" href="javascript:;" onclick="ViewClick(@item.TechSupportReqID,'Add')">| Add</a>
+                            <a class="details" href="javascript:;" onclick="ViewClick(@item.TechSupportReqID,'Edit')">| Edit</a>
+                        </td>
+                    </tr>
+                    count++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="9"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<table id="dialog" style="display: none; width:100%;" width="100%">
+</table>
+<script type="text/javascript">
+    $(function () {
+        //$("#dialog").dialog({
+        //    width: 800,
+        //    autoOpen: false,
+        //    modal: true,
+        //    title: "Edit Tech Request",
+        //});
+    });
+    function CloseDialog() {
+        $("#dialog").dialog("close");
+    }
+    function ViewClick(id, type) {
+        var reqId = id;
+        $('#dialog').html('');
+        if (type == "View") {
+            $("#dialog").dialog({
+                width: 800,
+                autoOpen: false,
+                modal: true,
+                title: "Edit Tech Request",
+            });
+            $.ajax({
+                type: "POST",
+                url: "/SAdmin/_EditRequest",
+                data: '{reqid: "' + reqId + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#dialog').html(response);
+                    $('#dialog').dialog('open');
+                },
+                failure: function (response) {
+                    alert('failure');
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert('error');
+                    alert(response.responseText);
+                }
+            });
+        }
+        else if (type == "Add"){
+            $("#dialog").dialog({
+                width: 800,
+                autoOpen: false,
+                modal: true,
+                title: "Add Account Configuration",
+            });
+            $.ajax({
+                type: "POST",
+                url: "/Admin/_AddAccountConfiguration",
+              //  data: '{reqid: "' + reqId + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#dialog').html(response);
+                    $('#dialog').dialog('open');
+                },
+                failure: function (response) {
+                    alert('failure');
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert('error');
+                    alert(response.responseText);
+                }
+            });
+        }
+        else if (type == "Edit") {
+            $("#dialog").dialog({
+                width: 800,
+                autoOpen: false,
+                modal: true,
+                title: "Add Account Configuration",
+            });
+            $.ajax({
+                type: "POST",
+                url: "/Admin/_EditAccountConfiguration",
+                 data: '{id: "' + 1 + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#dialog').html(response);
+                    $('#dialog').dialog('open');
+                },
+                failure: function (response) {
+                    alert('failure');
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert('error');
+                    alert(response.responseText);
+                }
+            });
+        }
+        else {
+            $("#dialog").dialog({
+                width: 800,
+                autoOpen: false,
+                modal: true,
+                title: "Tech Request Details",
+            });
+            $.ajax({
+                type: "POST",
+                url: "/SAdmin/_TecRequestHistory",
+                data: '{reqid: "' + reqId + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#dialog').html(response);
+                    $('#dialog').dialog('open');
+                },
+                failure: function (response) {
+                    alert('failure');
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert('error');
+                    alert(response.responseText);
+                }
+            });
+        }
+    }
+</script>

@@ -1,0 +1,160 @@
+﻿@model ApplicationModel.UploaderModel
+@{
+    ViewBag.Title = "Uploader";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    <title>Uploader</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ReportType").change(function () {
+                var id = $(this).val();
+                if (id == 1) {
+                    document.getElementById("trTDS").style.display = '';
+                }
+                else {
+                    $('#TDS').val('');
+                    document.getElementById("trTDS").style.display = 'none';
+
+                }
+            });
+        });
+
+
+        function Checksize(filesize) {
+            if (filesize > 2097152) // 2 MiB for bytes.
+            {
+                alert("File size must under 2MB!");
+                return;
+            }
+            else {
+                //    alert("File size less than 2MB!");
+            }
+        }
+        function CheckFile(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['xls', 'xlsx'];
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    alert("Only .xlsx file type is accepted.");
+                }
+                else {
+                    Checksize(input.files[0].size);
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("Uploader", "Admin", FormMethod.Post, new
+    {
+        enctype = "multipart/form-data"
+    }))
+    {
+        <div>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th colspan="3">
+                        Request Detail
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        Request Type
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(o => o.ReportType, new SelectList(ViewBag.RequestTypes, "ReportTypeId", "Name"), "Select Type", new { id = "ReportType" })
+                    </td>
+                    <td>
+                        @*@Html.ValidationMessageFor(m => m.CountryID, "", new { @class = "error" })*@
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Year-Month
+                    </td>
+                    <td>
+                        @Html.DropDownList("Year", new SelectList(ViewBag.Years, "Text", "Text"), "YY", new { id = "Year" })
+                        @Html.DropDownList("Month", new SelectList(ViewBag.Months, "Value", "Text"), "MM", new { id = "Month" })
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>File Upload</td>
+                    <td>
+                        <input type="file" id="fileupload" name="fileupload" onchange="CheckFile(this)" required title="Please upload the file."/>
+                    </td>
+                </tr>
+                <tr id="trTDS">
+                    <td>TDS</td>
+                    <td>
+                        <input type="number" id="ApplyTDS" name="ApplyTDS"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Submit" name="btnSubmit" />
+                        <input type="button" value="Cancel" />
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+        </script>
+    }
+</body>
+</html>
+

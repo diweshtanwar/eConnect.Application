@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ApplicationModel.UploaderModel>
+@{
+
+    Layout = null;
+}
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            buttons: [
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+            ],
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
+<div class="card" width="100%">
+    <div class="card-header">
+        <h3 class="card-title">
+            Uploader Details
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped" style="text-align :center;width:100%;">
+            <thead>
+                <tr>
+                    <th>SNo</th>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>Report Type</th>
+                    <th>File Name</th>
+                    <th>Uploaded On</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @{ int count = 1; }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @count
+                        </td>
+                        <td>
+                            @item.Year
+                        </td>
+                        <td>
+                            @item.MonthName
+                        </td>
+                        <td>
+                            @item.ReportTypeName
+                        </td>
+                        <td>
+                           @Html.ActionLink(@item.FileName, "OpenFileUploader", new { id = @item.UploaderId,year= @item.Year,month= @item.Month,filename= @item.FileName }, null)
+
+                        </td>
+                        <td>
+                            @item.UpdatedDate.ToString("dd-MMMM-yy")
+                        </td>
+                    </tr>
+                    count++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+

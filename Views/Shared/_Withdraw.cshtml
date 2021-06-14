@@ -1,0 +1,40 @@
+﻿
+<tr>
+    <td>
+        Request Type
+    </td>
+    <td>
+        @Html.DropDownList("Status", new List<SelectListItem>
+
+  {new SelectListItem{ Text="--Select--", Value = "" },
+     new SelectListItem{ Text="AA", Value = "1" },
+     new SelectListItem{ Text="BB", Value = "2" }
+  })
+    </td>
+
+</tr>
+<tr>
+    <td>
+        Amount
+    </td>
+    <td>
+        @Html.TextBox("Amount")
+    </td>
+</tr>
+<tr>
+    <td>
+        Account
+    </td>
+    <td>
+        <label id="lblAccount" name="lblAccount" />
+    </td>
+</tr>
+<tr>
+
+    <td colspan="2">
+        <center>
+            <input type="submit" value="Submit" />
+            <input type="button" value="Cancel" />
+        </center>
+    </td>
+</tr>

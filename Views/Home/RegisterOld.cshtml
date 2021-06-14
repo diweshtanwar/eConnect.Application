@@ -1,0 +1,385 @@
+﻿@model ApplicationModel.UsersModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    <title>Register</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+        function ClearVal() {
+            $('#user_img').attr('src', "");
+            $('#PassportPic').val('');
+        }
+        function Checksize(filesize) {
+            if (filesize > 2097152) // 2 MiB for bytes.
+            {
+                alert("File size must under 2MB!");
+                return;
+            }
+            else {
+                //    alert("File size less than 2MB!");
+            }
+        }
+        function CheckFile(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['pdf', 'jpg', 'png', 'jpeg'];
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    //$('#user_img').attr('src', "");
+                    alert("Only these file types are accepted : " + validExtensions.join(', '));
+                }
+                else {
+                    Checksize(input.files[0].size);
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                            //   $('#user_img').attr('src', e.target.result);
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            }
+        }
+        function show(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['jpg', 'png', 'jpeg'];
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    $('#user_img').attr('src', "");
+                    alert("Only these file types are accepted : " + validExtensions.join(', '));
+                }
+                else {
+                    Checksize(input.files[0].size);
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                            $('#user_img').attr('src', e.target.result);
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            }
+        }
+        $(document).ready(function () {
+            $("#CountryID").change(function () {
+                var id = $(this).val();
+                $("#StateID").empty();
+                $("#CityID").empty();
+                $.get("BindStates", { country_id: id }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#StateID").html(v);
+
+                });
+            });
+            $("#StateID").change(function () {
+                var sid = $(this).val();
+                $("#CityID").empty();
+                $.get("BindCity", { state_id: sid }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#CityID").html(v);
+                });
+            });
+        });
+    </script>
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("Register", "Home", FormMethod.Post, new
+    {
+        enctype = "multipart/form-data"
+    }))
+    {
+        <div>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th colspan="3">
+                        Personal Details
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        CSP Name
+                    </td>
+                    <td>
+                        @Html.TextBox("CSPName")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Father Name
+                    </td>
+                    <td>
+                        @Html.TextBox("FatherName")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Mother Name
+                    </td>
+                    <td>
+                        @Html.TextBox("MotherName")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Country
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(o => o.CountryID, new SelectList(ViewBag.AllCountries, "CountryId", "Name"), "Select Country", new { id = "CountryID" })
+                    </td>
+                    <td>
+                        @*@Html.ValidationMessageFor(m => m.CountryID, "", new { @class = "error" })*@
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        State
+                    </td>
+                    <td>
+                        <select id="StateID" name="StateID"></select>
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.StateID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        City
+                    </td>
+                    <td>
+                        <select id="CityID" name="CityID"></select>
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        BranchCode
+                    </td>
+                    <td>
+                        @Html.TextBox("BranchCode")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        PAN Card No
+                    </td>
+                    <td>
+                        @Html.TextBox("PANCardNo")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Voter Card ID
+                    </td>
+                    <td>
+                        @Html.TextBox("VoterIDNo");
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Adhar Card No
+                    </td>
+                    <td>
+                        @Html.TextBox("AdharCardNo")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Education
+                    </td>
+                    <td>
+                        @Html.TextBox("Education")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Mobile
+                    </td>
+                    <td>
+                        @Html.TextBox("Mobile")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        EMailID
+                    </td>
+                    <td>
+                        @Html.TextBox("EMailID")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.EMailID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="3">
+                        Upload
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        Passport Size Photo
+                    </td>
+                    <td>
+                        <nobr>
+                            <input type="file" id="PassportPic" name="PassportPic" onchange="show(this)" /><label id="lblClear" name="lblClear" style="color: blue;cursor: pointer;" onclick="ClearVal()">Clear</label>
+                        </nobr>
+                    </td>
+                    <td>
+                        <div> <img id="user_img" height="100" width="90" style="border:solid" /></div>
+                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        PAN Card No
+                    </td>
+                    <td>
+                        <input type="file" id="PANCardPic" name="PANCardPic" onchange="CheckFile(this)" />
+
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Voter Card ID
+                    </td>
+                    <td>
+                        <input type="file" id="VoterIDPic" name="VoterIDPic" onchange="CheckFile(this)" />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Adhar Card No
+                    </td>
+                    <td>
+                        <input type="file" id="AAdharCardPic" name="AAdharCardPic" onchange="CheckFile(this)" />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.CityID, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Latest Education Proof
+                    </td>
+                    <td>
+                        <input type="file" id="FileEducationProof" name="FileEducationProof" onchange="CheckFile(this)" />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        IIBF
+                    </td>
+                    <td>
+                        <input type="file" id="IIBFCertificatePic" name="IIBFCertificatePic" onchange="CheckFile(this)" />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "error" })
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Submit" name="btnSubmit" />
+                        <input type="button" value="Cancel"  />
+                        @Html.ActionLink("Approve", "ApproveCSP", "Admin")
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+        </script>
+    }
+</body>
+</html>
+

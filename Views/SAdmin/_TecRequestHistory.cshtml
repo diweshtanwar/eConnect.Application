@@ -1,0 +1,97 @@
+﻿@model ApplicationModel.TechSupportRequestModel
+
+
+    <tr>
+        <td>Request ID</td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.TechRequestId</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Summary
+        </td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.Summary</label>
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Problem Type
+        </td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.tblProblemType.Name</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Description
+        </td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.Description</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Mobile No
+        </td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.MobileNo</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Raised By
+        </td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.tblCSPDetail.Name</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Status
+        </td>
+        <td>
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.tblStatu.Name</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Requestd Date
+        </td>
+        <td>
+
+            <label id="TechSupportReqID " name="TechSupportReqID">@ViewBag.ReqDetails.RequestedDate.ToString("dd-MMMM-yy")</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Resolution Provided By
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Resolution Details
+        </td>
+        <td>
+            @Html.Raw(@ViewBag.ReqDetails.ResolutionDetail)
+           </td>
+    </tr>
+    <tr>
+        <td>
+            Attachment
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <input type="button" value="Cancel" onclick="CloseDialog()" />
+        </td>
+    </tr>
+
+
+

@@ -1,0 +1,156 @@
+﻿@model ApplicationModel.ApplicationSettingModel
+@{
+    ViewBag.Title = "ApplicationSetting";
+    Layout = "~/Views/Shared/_LayoutSuperAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="/resources/demos/style.css">
+<link href="~/Content/JS/jquery-ui.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="~/Content/JS/jquery-ui.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        LoadData();
+
+    });
+
+
+
+
+    function LoadData() {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("ApplicationSetting", "Admin")',
+                data: { type:"Search" },
+                dataType: 'html',
+                success: function (data) {
+                    $('#AppSettingDetailsList').html(data);
+                    $("#tdList").css('display', '');
+                }
+            });
+    }
+</script>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Application Setting </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                        <li class="breadcrumb-item active">Application Setting</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header" style="background-color: #28a745">
+                            <h3 class="card-title">Search</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Business:</label>
+                                        <input type="text" id="inputName" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Application:</label>
+                                        <input type="text" id="inputName" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>User Name:</label>
+                                <div class="input-group">
+                                    <input type="search" class="form-control " placeholder="Type your keywords here" value="">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default" onclick="LoadData()">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary" style="background-color: #28a745" onclick="ViewClick()">Add</button>
+            </div>
+            <div class="row" id="tdList" style="display:none;">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            @* <h3 class="card-title">Application Setting Details</h3>*@
+                            <h1 class="m-0">Application Setting Details </h1>
+                        </div>
+                        <div class="card-body" id="AppSettingDetailsList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="dialog" style="display: none;" width="100%">
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+    function ViewClick() {
+        $('#dialog').html('');
+        $("#dialog").dialog({
+            width: 800,
+            closeText: "Close",
+            autoOpen: false,
+            modal: true,
+            maxHeight: window.innerHeight - 100,
+            overflow: scroll,
+            title: "Add Application Configuration",
+        });
+        $.ajax({
+            type: "GET",
+            url: "/Admin/_AddApplicationSetting",
+            // data: '{reqid: "' + 2+ '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#dialog').html(response);
+                $('#dialog').dialog('open');
+            },
+            failure: function (response) {
+                alert('failure');
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert('error');
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+
+

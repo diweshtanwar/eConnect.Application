@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "TransactionRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Content/JS/jquery-1.7.1.min.js"></script>
+    <title>Register</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+            table th {
+                background-color: #c7c6c3;
+                color: #333;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            table th, table td {
+                padding: 5px;
+                width: 10%;
+                border: 1px solid #ccc;
+            }
+
+        .error {
+            color: red;
+        }
+    </style>
+
+
+    <script>
+        $(function () {
+            $("#Status").change(function (e) {
+                var val = $(this).val();
+                $("#billBudgetPartial").html('');
+                if (val == 1) {
+
+                    $("#billBudgetPartial").load("/Home/_Deposite");
+                }
+                else if (val == 2) {
+
+                    $("#billBudgetPartial").load("/Home/_Withdraw");
+                }
+                else {
+                    $("#billBudgetPartial").html('');
+                }
+            });
+        });
+
+
+        function CheckFile(input) {
+            if (input.files[0] != null) {
+                var validExtensions = ['pdf', 'jpg', 'png', 'jpeg'];
+                var fileName = input.files[0].name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+                    input.type = ''
+                    input.type = 'file'
+                    //$('#user_img').attr('src', "");
+                    alert("Only these file types are accepted : " + validExtensions.join(', '));
+                }
+                else {
+                    Checksize(input.files[0].size);
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                            //   $('#user_img').attr('src', e.target.result);
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            }
+        }
+        function InsertDepositDetails()//Created by Aditya//
+        {
+            if ($("#drpType").val() == "") {
+                alert("Please select Request Type !!");
+                $("#drpType").focus();
+                return false;
+            }
+            if ($("#txtAmount").val() == "") {
+                alert("Please enter Amount !!");
+                $("#txtAmount").focus();
+                return false;
+            }
+            if ($("#amountReceipt").get(0).files.length === 0) {
+                alert("Please upload pdf/jpg/png/jpeg file!!");
+                $("#amountReceipt").focus();
+                return false;
+            }
+            var fileUpload = $("#amountReceipt").get(0);
+            var files = fileUpload.files;
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+
+            fileData.append("Amount", $("#txtAmount").val());
+            fileData.append("Receipt", $("#drpType").val());
+            $.ajax({
+                url: '/Home/AddDepositDetails',
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data  
+                data: fileData,
+                success: function (result) {
+                    $("#Status").val("1");
+                    alert("Data Inserted Successfully!");
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+     
+        function InsertWithdrawDetails()//Created by Aditya//
+        {
+            if ($("#drpWStatus").val() == "") {
+                alert("Please select Status !!");
+                $("#drpWStatus").focus();
+                return false;
+            }
+            if ($("#txtWAmount").val() == "") {
+                alert("Please enter Amount !!");
+                $("#txtWAmount").focus();
+                return false;
+            }
+            if ($("#txtAccount").val() == "") {
+                alert("Please enter Account !!");
+                $("#txtAccount").focus();
+                return false;
+            }
+            var input = {
+                //"Amount": $("#drpWStatus").val(),
+                //"Status": $("#drpStatus").val()
+                "WAmount": $("#txtWAmount").val(),
+                "WStatus": $("#drpWStatus").val(),
+                "AccDetails": $("#txtAccount").val()
+            }
+            $.ajax({
+                url: '/Home/AddWithDrawDetails',
+                type: "POST",
+                data: input,
+                cache: false,
+                success: function (result) {
+                    alert("Data Inserted Successfully!");
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+    </script>
+</head>
+<body width="=100%">
+    @using (Html.BeginForm("TransactionRequest", "Home", FormMethod.Post))
+    {
+
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2">
+                    Transaction Request
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    Select Type
+                </td>
+                <td>
+                    @Html.DropDownList("Status", new List<SelectListItem>
+
+              {new SelectListItem{ Text="--Select--", Value = "" },
+                 new SelectListItem{ Text="Deposite", Value = "1" },
+                 new SelectListItem{ Text="Withdraw", Value = "2" }
+              })
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td colspan="2">
+                    <div id="billBudgetPartial">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@TempData["Message"]")
+            });
+        </script>
+    }
+</body>
+</html>
+
+
+

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ApplicationModel.ApplicationSettingModel>
+@{
+
+    Layout = null;
+}
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            buttons: [
+                {
+                    
+                    extend: 'print',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                       exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    }
+                },
+            ],
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Business</th>
+            <th>Application Name</th>
+            <th>Auto BackUp</th>
+            <th>Auto BackUp Detection</</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{ int count = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @count
+                </td>
+                <td>
+                    @item.BusinessId
+                </td>
+                <td>
+                    @item.ApplicationName
+                </td>
+                <td>
+                    @item.AutoBackUp
+                </td>
+                <td>
+                    @item.AutoBackUp
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="5"></th>
+        </tr>
+    </tfoot>
+</table>
+
